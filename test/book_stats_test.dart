@@ -7,12 +7,12 @@ import 'package:test/test.dart';
 
 /// 固定测试数据：与演示数据分开，改动演示数据不会牵连测试
 List<Book> sample() => const [
-      Book(id: 'A', title: '书甲', category: '文学', borrowCount: 100),
-      Book(id: 'B', title: '书乙', category: '文学', borrowCount: 50),
-      Book(id: 'C', title: '书丙', category: '科学', borrowCount: 80),
-      Book(id: 'D', title: '书丁', category: '科学', borrowCount: 20),
-      Book(id: 'E', title: '书戊', category: '历史', borrowCount: 0),
-    ];
+  Book(id: 'A', title: '书甲', category: '文学', borrowCount: 100),
+  Book(id: 'B', title: '书乙', category: '文学', borrowCount: 50),
+  Book(id: 'C', title: '书丙', category: '科学', borrowCount: 80),
+  Book(id: 'D', title: '书丁', category: '科学', borrowCount: 20),
+  Book(id: 'E', title: '书戊', category: '历史', borrowCount: 0),
+];
 
 void main() {
   group('BookStats 基本统计', () {
@@ -121,7 +121,9 @@ void main() {
       final stats = BookStats(sample());
 
       expect(
-        () => stats.books.add(const Book(id: 'X', title: 'T', category: 'C', borrowCount: 0)),
+        () => stats.books.add(
+          const Book(id: 'X', title: 'T', category: 'C', borrowCount: 0),
+        ),
         throwsUnsupportedError,
       );
     });

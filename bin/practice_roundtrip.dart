@@ -60,8 +60,10 @@ Future<void> main() async {
     for (final key in ['id', 'title', 'category', 'borrowCount']) {
       if (original[key] != roundtripped[key]) {
         fieldMismatch++;
-        print('    第 ${i + 1} 条字段 $key 不一致：'
-            '${original[key]} vs ${roundtripped[key]}');
+        print(
+          '    第 ${i + 1} 条字段 $key 不一致：'
+          '${original[key]} vs ${roundtripped[key]}',
+        );
       }
     }
   }
@@ -70,8 +72,11 @@ Future<void> main() async {
   // ---------- 第二轮：对象 → 文本 → 对象 ----------
   print('\n===== 第 2 轮：Book 对象 → JSON 文本 → Book 对象 =====');
   final booksAgain = parseBooks(reEncoded);
-  check('条数一致', booksAgain.length == books.length,
-      '${booksAgain.length} vs ${books.length}');
+  check(
+    '条数一致',
+    booksAgain.length == books.length,
+    '${booksAgain.length} vs ${books.length}',
+  );
 
   var objectMismatch = 0;
   for (var i = 0; i < books.length; i++) {
@@ -90,17 +95,35 @@ Future<void> main() async {
   // ---------- 第三轮：幂等性 ----------
   print('\n===== 第 3 轮：再转一圈，输出应当完全一样（幂等） =====');
   final third = jsonEncode([for (final b in booksAgain) b.toJson()]);
-  check('第二次编码与第一次编码逐字符相同', third == reEncoded,
-      '长度 ${third.length} vs ${reEncoded.length}');
+  check(
+    '第二次编码与第一次编码逐字符相同',
+    third == reEncoded,
+    '长度 ${third.length} vs ${reEncoded.length}',
+  );
 
   // ---------- 第四轮：边界值 ----------
   print('\n===== 第 4 轮：边界值与特殊字符 =====');
   final edgeCases = <Book>[
     const Book(id: 'E1', title: '零借阅', category: '测试', borrowCount: 0),
-    const Book(id: 'E2', title: '负数（不该出现但模型不拦）', category: '测试', borrowCount: -5),
-    const Book(id: 'E3', title: '带"引号"和\\反斜杠', category: '测试', borrowCount: 999999),
+    const Book(
+      id: 'E2',
+      title: '负数（不该出现但模型不拦）',
+      category: '测试',
+      borrowCount: -5,
+    ),
+    const Book(
+      id: 'E3',
+      title: '带"引号"和\\反斜杠',
+      category: '测试',
+      borrowCount: 999999,
+    ),
     const Book(id: 'E4', title: '换行\n与制表\t', category: '测试', borrowCount: 1),
-    const Book(id: 'E5', title: '中文、emoji 📚 与空格 ', category: '测试', borrowCount: 42),
+    const Book(
+      id: 'E5',
+      title: '中文、emoji 📚 与空格 ',
+      category: '测试',
+      borrowCount: 42,
+    ),
   ];
   final edgeJson = jsonEncode([for (final b in edgeCases) b.toJson()]);
   final edgeBack = parseBooks(edgeJson);
@@ -122,7 +145,12 @@ Future<void> main() async {
 
   // ---------- 第五轮：证明"漏字段会被抓出来" ----------
   print('\n===== 第 5 轮：故意做一个不对称的模型，验证测试确实能抓到 =====');
-  final broken = _BrokenBook.fromJson({'id': 'X', 'title': 'T', 'category': 'C', 'borrowCount': 7});
+  final broken = _BrokenBook.fromJson({
+    'id': 'X',
+    'title': 'T',
+    'category': 'C',
+    'borrowCount': 7,
+  });
   final brokenJson = jsonEncode(broken.toJson());
   print('  故意写错的模型（toJson 漏掉了 category）：');
   print('    原始字段：id=X, title=T, category=C, borrowCount=7');
@@ -155,16 +183,16 @@ class _BrokenBook {
   });
 
   factory _BrokenBook.fromJson(Map<String, dynamic> j) => _BrokenBook(
-        id: j['id'] as String,
-        title: j['title'] as String,
-        category: j['category'] as String,
-        borrowCount: (j['borrowCount'] as num).toInt(),
-      );
+    id: j['id'] as String,
+    title: j['title'] as String,
+    category: j['category'] as String,
+    borrowCount: (j['borrowCount'] as num).toInt(),
+  );
 
   /// 故意只写三个字段，漏掉 category
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'title': title,
-        'borrowCount': borrowCount,
-      };
+    'id': id,
+    'title': title,
+    'borrowCount': borrowCount,
+  };
 }

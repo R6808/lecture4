@@ -43,11 +43,13 @@ class DataFileException implements Exception {
 
   /// 面向用户的提示文本
   String get message => switch (problem) {
-        DataFileProblem.missing => '数据文件缺失，请检查 $path',
-        DataFileProblem.unreadable => '数据文件无法读取：$path${detail == null ? '' : '（$detail）'}',
-        DataFileProblem.malformedJson => '数据文件不是合法的 JSON：$path${detail == null ? '' : '（$detail）'}',
-        DataFileProblem.notAList => '数据文件格式不对：$path 顶层应为数组',
-      };
+    DataFileProblem.missing => '数据文件缺失，请检查 $path',
+    DataFileProblem.unreadable =>
+      '数据文件无法读取：$path${detail == null ? '' : '（$detail）'}',
+    DataFileProblem.malformedJson =>
+      '数据文件不是合法的 JSON：$path${detail == null ? '' : '（$detail）'}',
+    DataFileProblem.notAList => '数据文件格式不对：$path 顶层应为数组',
+  };
 
   @override
   String toString() => message;
@@ -97,7 +99,10 @@ List<Book> parseBooks(String text) {
   }
 
   if (decoded is! List) {
-    throw DataFileException(path: defaultDataPath, problem: DataFileProblem.notAList);
+    throw DataFileException(
+      path: defaultDataPath,
+      problem: DataFileProblem.notAList,
+    );
   }
 
   return [

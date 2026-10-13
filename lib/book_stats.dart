@@ -53,7 +53,8 @@ class BookStats {
   /// `[...books]` 先复制再排序：内部列表是 unmodifiable 的，
   /// 直接 sort 会抛 UnsupportedError，而且也会破坏原顺序。
   List<Book> topBorrowed([int n = 3]) {
-    final sorted = [...books]..sort((a, b) {
+    final sorted = [...books]
+      ..sort((a, b) {
         final byCount = b.borrowCount.compareTo(a.borrowCount);
         return byCount != 0 ? byCount : a.id.compareTo(b.id);
       });
@@ -78,7 +79,9 @@ class BookStats {
     final top = topBorrowed();
     for (var i = 0; i < top.length; i++) {
       final b = top[i];
-      buffer.writeln('  ${i + 1}. 《${b.title}》 ${b.borrowCount} 次（${b.category}）');
+      buffer.writeln(
+        '  ${i + 1}. 《${b.title}》 ${b.borrowCount} 次（${b.category}）',
+      );
     }
     return buffer.toString().trimRight();
   }

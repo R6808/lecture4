@@ -26,54 +26,51 @@ void loadBooksWithCallbacks({
   required void Function(String message) onError,
 }) {
   // ── 第 1 层：先确认文件在不在 ────────────────────────────
-  File(path).exists().then(
-    (exists) {
-      if (!exists) {
-        onError('数据文件缺失，请检查 $path');
-        return;
-      }
+  File(path).exists().then((exists) {
+    if (!exists) {
+      onError('数据文件缺失，请检查 $path');
+      return;
+    }
 
-      // ── 第 2 层：读文件内容 ──────────────────────────────
-      File(path).readAsString().then(
-        (text) {
-          // ── 第 3 层：解析 JSON ───────────────────────────
-          final Object? decoded;
+    // ── 第 2 层：读文件内容 ──────────────────────────────
+    File(path).readAsString().then(
+      (text) {
+        // ── 第 3 层：解析 JSON ───────────────────────────
+        final Object? decoded;
+        try {
+          decoded = jsonDecode(text);
+        } on FormatException catch (e) {
+          onError('数据文件不是合法的 JSON：${e.message}');
+          return;
+        }
+
+        if (decoded is! List) {
+          onError('数据文件格式不对：$path 顶层应为数组');
+          return;
+        }
+
+        final books = <Book>[];
+        for (var i = 0; i < decoded.length; i++) {
+          final item = decoded[i];
+          if (item is! Map<String, dynamic>) {
+            onError('数据格式有误：第 ${i + 1} 条记录应为 JSON 对象');
+            return;
+          }
           try {
-            decoded = jsonDecode(text);
-          } on FormatException catch (e) {
-            onError('数据文件不是合法的 JSON：${e.message}');
+            books.add(Book.fromJson(item, index: i));
+          } on BookParseException catch (e) {
+            onError(e.message);
             return;
           }
+        }
 
-          if (decoded is! List) {
-            onError('数据文件格式不对：$path 顶层应为数组');
-            return;
-          }
-
-          final books = <Book>[];
-          for (var i = 0; i < decoded.length; i++) {
-            final item = decoded[i];
-            if (item is! Map<String, dynamic>) {
-              onError('数据格式有误：第 ${i + 1} 条记录应为 JSON 对象');
-              return;
-            }
-            try {
-              books.add(Book.fromJson(item, index: i));
-            } on BookParseException catch (e) {
-              onError(e.message);
-              return;
-            }
-          }
-
-          // ── 第 4 层：算统计并输出 ────────────────────────
-          onSuccess(books);
-        },
-        // 每往下一层，错误都要**重新接一次**，否则异常就漏掉了
-        onError: (Object e) => onError('文件读取出错：$e'),
-      );
-    },
-    onError: (Object e) => onError('检查文件时出错：$e'),
-  );
+        // ── 第 4 层：算统计并输出 ────────────────────────
+        onSuccess(books);
+      },
+      // 每往下一层，错误都要**重新接一次**，否则异常就漏掉了
+      onError: (Object e) => onError('文件读取出错：$e'),
+    );
+  }, onError: (Object e) => onError('检查文件时出错：$e'));
 }
 
 /// 主函数

@@ -73,51 +73,96 @@ void main() {
   group('Book.fromJson 异常路径', () {
     test('缺少必填字段 id → BookParseException', () {
       expect(
-        () => Book.fromJson({'title': 'T', 'category': 'C', 'borrowCount': 1}, index: 0),
-        throwsA(isA<BookParseException>()
-            .having((e) => e.field, 'field', 'id')
-            .having((e) => e.message, 'message', contains('第 1 条'))),
+        () => Book.fromJson({
+          'title': 'T',
+          'category': 'C',
+          'borrowCount': 1,
+        }, index: 0),
+        throwsA(
+          isA<BookParseException>()
+              .having((e) => e.field, 'field', 'id')
+              .having((e) => e.message, 'message', contains('第 1 条')),
+        ),
       );
     });
 
     test('缺少必填字段 title → 提示里带字段名', () {
       expect(
         () => Book.fromJson({'id': 'A', 'category': 'C', 'borrowCount': 1}),
-        throwsA(isA<BookParseException>()
-            .having((e) => e.message, 'message', contains('title'))),
+        throwsA(
+          isA<BookParseException>().having(
+            (e) => e.message,
+            'message',
+            contains('title'),
+          ),
+        ),
       );
     });
 
     test('必填字段是空字符串 → 报错', () {
       expect(
-        () => Book.fromJson({'id': 'A', 'title': '  ', 'category': 'C', 'borrowCount': 1}),
-        throwsA(isA<BookParseException>()
-            .having((e) => e.message, 'message', contains('空字符串'))),
+        () => Book.fromJson({
+          'id': 'A',
+          'title': '  ',
+          'category': 'C',
+          'borrowCount': 1,
+        }),
+        throwsA(
+          isA<BookParseException>().having(
+            (e) => e.message,
+            'message',
+            contains('空字符串'),
+          ),
+        ),
       );
     });
 
     test('id 类型不对（int）→ 提示实际类型', () {
       expect(
-        () => Book.fromJson({'id': 1001, 'title': 'T', 'category': 'C', 'borrowCount': 1}),
-        throwsA(isA<BookParseException>()
-            .having((e) => e.message, 'message', contains('int'))),
+        () => Book.fromJson({
+          'id': 1001,
+          'title': 'T',
+          'category': 'C',
+          'borrowCount': 1,
+        }),
+        throwsA(
+          isA<BookParseException>().having(
+            (e) => e.message,
+            'message',
+            contains('int'),
+          ),
+        ),
       );
     });
 
     test('borrowCount 类型不对（String）→ 报错而不是静默当 0', () {
       expect(
-        () => Book.fromJson(
-            {'id': 'A', 'title': 'T', 'category': 'C', 'borrowCount': '很多'}),
-        throwsA(isA<BookParseException>()
-            .having((e) => e.field, 'field', 'borrowCount')),
+        () => Book.fromJson({
+          'id': 'A',
+          'title': 'T',
+          'category': 'C',
+          'borrowCount': '很多',
+        }),
+        throwsA(
+          isA<BookParseException>().having(
+            (e) => e.field,
+            'field',
+            'borrowCount',
+          ),
+        ),
       );
     });
 
     test('异常信息不问 index 时不含"第 N 条"', () {
       expect(
         () => Book.fromJson({'title': 'T', 'category': 'C'}),
-        throwsA(isA<BookParseException>()
-            .having((e) => e.message, 'message', isNot(contains('第')))),
+        throwsA(
+          isA<BookParseException>().having(
+            (e) => e.message,
+            'message',
+            isNot(contains('第')),
+          ),
+        ),
       );
     });
   });
@@ -132,7 +177,12 @@ void main() {
     });
 
     test('roundtrip：对象 → JSON → 对象，字段全部一致', () {
-      const original = Book(id: 'B006', title: '活着', category: '文学', borrowCount: 178);
+      const original = Book(
+        id: 'B006',
+        title: '活着',
+        category: '文学',
+        borrowCount: 178,
+      );
       final restored = Book.fromJson(jsonDecode(jsonEncode(original.toJson())));
 
       expect(restored.id, original.id);
@@ -175,24 +225,33 @@ void main() {
     test('JSON 语法错误 → DataFileException(malformedJson)', () {
       expect(
         () => parseBooks('[{"id":"A","title":"T"'),
-        throwsA(isA<DataFileException>()
-            .having((e) => e.problem, 'problem', DataFileProblem.malformedJson)),
+        throwsA(
+          isA<DataFileException>().having(
+            (e) => e.problem,
+            'problem',
+            DataFileProblem.malformedJson,
+          ),
+        ),
       );
     });
 
     test('顶层不是数组 → DataFileException(notAList)', () {
       expect(
         () => parseBooks('{"id":"A"}'),
-        throwsA(isA<DataFileException>()
-            .having((e) => e.problem, 'problem', DataFileProblem.notAList)),
+        throwsA(
+          isA<DataFileException>().having(
+            (e) => e.problem,
+            'problem',
+            DataFileProblem.notAList,
+          ),
+        ),
       );
     });
 
     test('数组里混入非对象 → 报出是第几条', () {
       expect(
         () => parseBooks('[{"id":"A","title":"T","category":"C"}, "我不是对象"]'),
-        throwsA(isA<BookParseException>()
-            .having((e) => e.index, 'index', 1)),
+        throwsA(isA<BookParseException>().having((e) => e.index, 'index', 1)),
       );
     });
 
@@ -204,9 +263,11 @@ void main() {
             {"id":"B","category":"C","borrowCount":1}
           ]
         '''),
-        throwsA(isA<BookParseException>()
-            .having((e) => e.index, 'index', 1)
-            .having((e) => e.message, 'message', contains('第 2 条'))),
+        throwsA(
+          isA<BookParseException>()
+              .having((e) => e.index, 'index', 1)
+              .having((e) => e.message, 'message', contains('第 2 条')),
+        ),
       );
     });
   });
@@ -215,9 +276,11 @@ void main() {
     test('文件不存在 → DataFileException(missing) 且提示含路径', () async {
       await expectLater(
         loadBooks(path: 'data/肯定不存在的文件.json'),
-        throwsA(isA<DataFileException>()
-            .having((e) => e.problem, 'problem', DataFileProblem.missing)
-            .having((e) => e.message, 'message', contains('数据文件缺失'))),
+        throwsA(
+          isA<DataFileException>()
+              .having((e) => e.problem, 'problem', DataFileProblem.missing)
+              .having((e) => e.message, 'message', contains('数据文件缺失')),
+        ),
       );
     });
 

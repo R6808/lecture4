@@ -59,7 +59,9 @@ Future<void> main() async {
   print('');
   print('对比：如果直接 File(...).readAsString() 不捕获，用户会看到：');
   print('  Unhandled exception:');
-  print('  PathNotFoundException: Cannot open file, path = ... (OS Error: ...)');
+  print(
+    '  PathNotFoundException: Cannot open file, path = ... (OS Error: ...)',
+  );
   print('  #0      _File.throwIfError (dart:io/file_impl.dart)');
   print('  …（一长串调用栈，看不出该怎么办）');
   print('');
@@ -69,15 +71,9 @@ Future<void> main() async {
   // ============================================================
   print('【第二类】字段缺失\n');
 
-  scenario(
-    '缺少必填字段 title',
-    '[{"id":"B001","category":"计算机","borrowCount":10}]',
-  );
+  scenario('缺少必填字段 title', '[{"id":"B001","category":"计算机","borrowCount":10}]');
 
-  scenario(
-    '缺少必填字段 id',
-    '[{"title":"活着","category":"文学","borrowCount":178}]',
-  );
+  scenario('缺少必填字段 id', '[{"title":"活着","category":"文学","borrowCount":178}]');
 
   scenario(
     '必填字段是空字符串',
@@ -115,26 +111,32 @@ Future<void> main() async {
     '[{"id":"B001","title":"活着","category":"文学","borrowCount":10}, "我不是对象"]',
   );
 
-  scenario(
-    'JSON 语法本身有问题（少了一个大括号）',
-    '[{"id":"B001","title":"活着"',
-  );
+  scenario('JSON 语法本身有问题（少了一个大括号）', '[{"id":"B001","title":"活着"');
 
-  scenario(
-    '顶层不是数组，而是一个对象',
-    '{"id":"B001","title":"活着"}',
-  );
+  scenario('顶层不是数组，而是一个对象', '{"id":"B001","title":"活着"}');
 
   // ============================================================
   // 第四类：类型安全的正当写法
   // ============================================================
   print('【补充】JSON 数字可能是 int 也可能是 double');
-  final withInt = Book.fromJson(jsonDecode('{"id":"A","title":"T","category":"C","borrowCount":12}'));
-  final withDouble = Book.fromJson(jsonDecode('{"id":"A","title":"T","category":"C","borrowCount":12.0}'));
-  final withFloat = Book.fromJson(jsonDecode('{"id":"A","title":"T","category":"C","borrowCount":12.9}'));
-  print('  borrowCount: 12    → ${withInt.borrowCount}（${withInt.borrowCount.runtimeType}）');
-  print('  borrowCount: 12.0  → ${withDouble.borrowCount}（${withDouble.borrowCount.runtimeType}）');
-  print('  borrowCount: 12.9  → ${withFloat.borrowCount}（${withFloat.borrowCount.runtimeType}）');
+  final withInt = Book.fromJson(
+    jsonDecode('{"id":"A","title":"T","category":"C","borrowCount":12}'),
+  );
+  final withDouble = Book.fromJson(
+    jsonDecode('{"id":"A","title":"T","category":"C","borrowCount":12.0}'),
+  );
+  final withFloat = Book.fromJson(
+    jsonDecode('{"id":"A","title":"T","category":"C","borrowCount":12.9}'),
+  );
+  print(
+    '  borrowCount: 12    → ${withInt.borrowCount}（${withInt.borrowCount.runtimeType}）',
+  );
+  print(
+    '  borrowCount: 12.0  → ${withDouble.borrowCount}（${withDouble.borrowCount.runtimeType}）',
+  );
+  print(
+    '  borrowCount: 12.9  → ${withFloat.borrowCount}（${withFloat.borrowCount.runtimeType}）',
+  );
   print('  结论：先 `as num` 接住再 toInt()，整数和小数两条路都走得通，不会抛类型错误。');
   print('        这正是指南 4.2 节"翻车警告"强调的写法。');
   print('');

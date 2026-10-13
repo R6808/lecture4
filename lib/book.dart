@@ -31,7 +31,9 @@ class BookParseException implements Exception {
 
   /// 面向用户的提示文本
   String get message {
-    final where = index >= 0 ? '第 ${index + 1} 条记录的 "$field" 字段' : '"$field" 字段';
+    final where = index >= 0
+        ? '第 ${index + 1} 条记录的 "$field" 字段'
+        : '"$field" 字段';
     return '数据格式有误：$where$detail';
   }
 
@@ -74,7 +76,11 @@ class Book {
   }
 
   /// 取出必填的字符串字段，缺失或类型不对都抛出可读异常
-  static String _requireString(Map<String, dynamic> json, String field, int index) {
+  static String _requireString(
+    Map<String, dynamic> json,
+    String field,
+    int index,
+  ) {
     if (!json.containsKey(field)) {
       throw BookParseException(
         index: index,
@@ -91,11 +97,7 @@ class Book {
       );
     }
     if (value.trim().isEmpty) {
-      throw BookParseException(
-        index: index,
-        field: field,
-        detail: '不能是空字符串',
-      );
+      throw BookParseException(index: index, field: field, detail: '不能是空字符串');
     }
     return value;
   }
@@ -124,11 +126,11 @@ class Book {
 
   /// 转回 JSON 对象
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'title': title,
-        'category': category,
-        'borrowCount': borrowCount,
-      };
+    'id': id,
+    'title': title,
+    'category': category,
+    'borrowCount': borrowCount,
+  };
 
   @override
   String toString() => 'Book($id, $title, $category, $borrowCount)';

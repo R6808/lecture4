@@ -60,8 +60,10 @@ Future<void> main() async {
   final streamArrivals = await consumeStream(numbersAsStream(count, gap), sw);
   sw.stop();
   print('  流关闭，总耗时 ${sw.elapsedMilliseconds} ms');
-  print('  结论：每个值一到就能立刻处理，全程 3 个值分别在 '
-      '${streamArrivals.join(" / ")} ms 到达。');
+  print(
+    '  结论：每个值一到就能立刻处理，全程 3 个值分别在 '
+    '${streamArrivals.join(" / ")} ms 到达。',
+  );
 
   // ---------- 实验二：Future 链只有链尾 ----------
   print('\n===== 实验二：Future 链 —— 中间值拿不到 =====');

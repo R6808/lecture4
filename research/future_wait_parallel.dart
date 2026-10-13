@@ -36,11 +36,7 @@ Future<List<String>> serial() async {
 
 /// 并行执行三个任务
 Future<List<String>> parallel() async {
-  return Future.wait([
-    task('任务A', 1000),
-    task('任务B', 1000),
-    task('任务C', 1000),
-  ]);
+  return Future.wait([task('任务A', 1000), task('任务B', 1000), task('任务C', 1000)]);
 }
 
 Future<void> main() async {
@@ -74,9 +70,7 @@ Future<void> main() async {
   print('\n===== 实验二：任务数增加时并行耗时的变化 =====');
   for (final n in [1, 3, 5]) {
     sw = Stopwatch()..start();
-    await Future.wait([
-      for (var i = 1; i <= n; i++) task('任务$i', 300),
-    ]);
+    await Future.wait([for (var i = 1; i <= n; i++) task('任务$i', 300)]);
     sw.stop();
     print('  $n 个任务（各 300 ms）并行：${sw.elapsedMilliseconds} ms');
   }
@@ -92,9 +86,18 @@ Future<void> main() async {
   var finished = <String>[];
   try {
     await Future.wait([
-      task('任务A', 200).then((v) { finished.add('A'); return v; }),
-      task('任务B', 400, shouldFail: true).then((v) { finished.add('B'); return v; }),
-      task('任务C', 600).then((v) { finished.add('C'); return v; }),
+      task('任务A', 200).then((v) {
+        finished.add('A');
+        return v;
+      }),
+      task('任务B', 400, shouldFail: true).then((v) {
+        finished.add('B');
+        return v;
+      }),
+      task('任务C', 600).then((v) {
+        finished.add('C');
+        return v;
+      }),
     ]);
   } catch (e) {
     sw.stop();
@@ -112,14 +115,20 @@ Future<void> main() async {
   sw = Stopwatch()..start();
   finished = <String>[];
   try {
-    await Future.wait(
-      [
-        task('任务A', 200).then((v) { finished.add('A'); return v; }),
-        task('任务B', 400, shouldFail: true).then((v) { finished.add('B'); return v; }),
-        task('任务C', 600).then((v) { finished.add('C'); return v; }),
-      ],
-      eagerError: true,
-    );
+    await Future.wait([
+      task('任务A', 200).then((v) {
+        finished.add('A');
+        return v;
+      }),
+      task('任务B', 400, shouldFail: true).then((v) {
+        finished.add('B');
+        return v;
+      }),
+      task('任务C', 600).then((v) {
+        finished.add('C');
+        return v;
+      }),
+    ], eagerError: true);
   } catch (e) {
     sw.stop();
     print('    捕获到异常：$e');
