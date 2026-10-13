@@ -1,0 +1,23 @@
+name: lecture4
+description: 课堂作业四 案例复现 async_json —— 异步读取本地 JSON、解析为模型并汇总输出。
+version: 1.0.0
+repository: https://github.com/R6808/lecture4
+publish_to: none
+
+environment:
+  sdk: ^3.13.4
+
+# 依赖规范（自主实践任务 4）：
+#   1. 全部使用 ^ 约束，允许兼容的小版本与补丁升级，不允许跨大版本
+#   2. 无冗余依赖——只保留真正被 import 的包
+#   3. pubspec.lock 一并提交，保证别人 clone 下来装到的是同一套版本
+dependencies:
+  # 用于跨平台拼接路径（Windows 用反斜杠、Linux 用正斜杠），
+  # 直接字符串拼 '/' 在 Windows 上虽然能跑，但不是可移植的写法。
+  path: ^1.9.1
+
+dev_dependencies:
+  # Dart 官方推荐的静态检查规则集
+  lints: ^6.0.0
+  # 单元测试框架
+  test: ^1.25.6

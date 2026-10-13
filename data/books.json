@@ -1,0 +1,20 @@
+[
+  { "id": "B001", "title": "深入理解计算机系统", "category": "计算机", "borrowCount": 156 },
+  { "id": "B002", "title": "Dart 编程语言", "category": "计算机", "borrowCount": 98 },
+  { "id": "B003", "title": "算法导论", "category": "计算机", "borrowCount": 143 },
+  { "id": "B004", "title": "计算机网络：自顶向下方法", "category": "计算机", "borrowCount": 87 },
+  { "id": "B005", "title": "百年孤独", "category": "文学", "borrowCount": 132 },
+  { "id": "B006", "title": "活着", "category": "文学", "borrowCount": 178 },
+  { "id": "B007", "title": "红楼梦", "category": "文学", "borrowCount": 95 },
+  { "id": "B008", "title": "万历十五年", "category": "历史", "borrowCount": 76 },
+  { "id": "B009", "title": "全球通史", "category": "历史", "borrowCount": 64 },
+  { "id": "B010", "title": "时间简史", "category": "科学", "borrowCount": 121 },
+  { "id": "B011", "title": "自私的基因", "category": "科学", "borrowCount": 58 },
+  { "id": "B012", "title": "费曼物理学讲义", "category": "科学", "borrowCount": 43 },
+  { "id": "B013", "title": "国富论", "category": "经济", "borrowCount": 51 },
+  { "id": "B014", "title": "经济学原理", "category": "经济", "borrowCount": 109 },
+  { "id": "B015", "title": "艺术的故事", "category": "艺术", "borrowCount": 39 },
+  { "id": "B016", "title": "苏菲的世界", "category": "哲学", "borrowCount": 83 },
+  { "id": "B017", "title": "中国哲学简史", "category": "哲学", "borrowCount": 47 },
+  { "id": "B018", "title": "数学分析", "category": "数学", "borrowCount": 66 }
+]

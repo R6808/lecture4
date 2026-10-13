@@ -1,0 +1,15 @@
+# https://dart.dev/tools/private-files
+# Created by `dart pub`
+.dart_tool/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# 构建产物
+build/
+
+# 说明：pubspec.lock **不忽略**，需要提交进仓库。
+# 因为这是可执行程序（不是给别人依赖的库），锁定版本能保证
+# 别人 clone 下来装到的是同一套依赖版本，结果可复现。
